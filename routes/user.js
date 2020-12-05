@@ -2,12 +2,18 @@ const Users = require('../models/Users');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const e = require('express');
+const { reset } = require('nodemon');
+var path = require('path');
 
 module.exports = app =>{
   mongoose.set('useFindAndModify', false);
-  app.get('/', (req,res)=>{
-    res.send(`<div>Server's Up!</div>`)
-  })
+  app.get('/', function(request, response) {
+    response.sendFile(path.join(__dirname + '/../login.html'));
+  });
+
+  app.get('/labHome', function(request, response) {
+    response.sendFile(path.join(__dirname + '/../labHome.html'));
+  });
 
   app.get('/user' , async(req,res,next)=>{
         try{
@@ -40,11 +46,12 @@ module.exports = app =>{
         const password = req.body.password;
 
         Users.findOne({labId:labId}, async function(err, user){
-      
+
           if(!user) {
             const newUser = new Users();
-            newUser.labId = labId;
-            newUser.password =  bcrypt.hashSync(password,14);
+            newUser.labId = req.body.labId;
+            newUser.password =  req.body.password;
+
             const user = await newUser.save();
     
             res.status(201).send(user);
@@ -61,23 +68,32 @@ module.exports = app =>{
       }
 });
 
+
 //login
-  app.post('/login', async(req,res) =>{
+  app.post('/login', function(req,res){
     try{
+      
+      console.log(req.body.labId);
+      console.log(req.body.password);
 
       Users.findOne({labId : req.body.labId}, (err,user)=>{
-      
+        
+        console.log(req.body);
+        
         if(!user){
           res.sendStatus(404)
+          console.log("user does not exist");
         }else{
-          if(err || !bcrypt.compareSync(req.body.password, user.password)){
+          console.log(user.password);
+          if(err || !(req.body.password == user.password)){
             res.sendStatus(404);
+            console.log("password error");
           }
           else{
-            res.send(user);
+            console.log("redirecting");
+            res.send('http://localhost:3000/labHome');
           }
         }
-
       });
 
     }

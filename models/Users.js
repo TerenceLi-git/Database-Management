@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 
    labId: {
      type:String,
+     required: true,
      default :"",
-     trim:true
    },
 
    password:{

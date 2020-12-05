@@ -3,5 +3,5 @@ module.exports = {
   PORT: process.env.PORT || 3000,
   URL : process.env.BASE_URL || 'http://localhost:3000',
   MONGODB_URI:
-    process.env.MONGODB_URI ||  'mongodb+srv://xinhomeworkacc:<password>@cluster0.iqmpg.mongodb.net/<dbname>?retryWrites=true&w=majority'
+    process.env.MONGODB_URI ||  'mongodb+srv://xinhomeworkacc:xinpassword123@cluster0.iqmpg.mongodb.net/<dbname>?retryWrites=true&w=majority'
 };
