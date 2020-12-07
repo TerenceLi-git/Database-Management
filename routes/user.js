@@ -5,6 +5,9 @@ const e = require('express');
 const { reset } = require('nodemon');
 var path = require('path');
 
+const labId = "0000";
+const password = "password";
+
 module.exports = app =>{
   mongoose.set('useFindAndModify', false);
   app.get('/', function(request, response) {
@@ -13,6 +16,22 @@ module.exports = app =>{
 
   app.get('/labHome', function(request, response) {
     response.sendFile(path.join(__dirname + '/../labHome.html'));
+  });
+
+  app.get('/testCollection', function(request, response) {
+    response.sendFile(path.join(__dirname + '/../TestCollection.html'));
+  });
+
+  app.get('/poolMapping', function(request, response) {
+    response.sendFile(path.join(__dirname + '/../poolMapping.html'));
+  });
+
+  app.get('/wellTesting', function(request, response) {
+    response.sendFile(path.join(__dirname + '/../wellTesting.html'));
+  });
+
+  app.get('/employeeLogin', function(request, response) {
+    response.sendFile(path.join(__dirname + '/../EmployeeLogin.html'));
   });
 
   app.get('/user' , async(req,res,next)=>{
@@ -42,15 +61,17 @@ module.exports = app =>{
   app.post('/signup', async (req, res)=>{
 
       try{
-        const labId = req.body.labId;
+        const Email = req.body.email;
         const password = req.body.password;
+        const employeeId = req.body.password;
 
-        Users.findOne({labId:labId}, async function(err, user){
+        Users.findOne({Email:Email}, async function(err, user){
 
           if(!user) {
             const newUser = new Users();
-            newUser.labId = req.body.labId;
+            newUser.Email = req.body.email;
             newUser.password =  req.body.password;
+            newUser.EmployeeId = req.body.employeeId;
 
             const user = await newUser.save();
     
@@ -68,15 +89,46 @@ module.exports = app =>{
       }
 });
 
+//lab login test
+app.post('/labIdlogin', function(req,res){
+    givenLabId = req.body.labId;
+    givenLabPassword = req.body.password;
 
-//login
+    
+    console.log(givenLabId);
+    console.log(givenLabPassword);
+
+    console.log(labId);
+    console.log(password);
+
+    console.log(!(password == givenLabPassword));
+
+    if(!(labId == givenLabId))
+    {
+      res.sendStatus(404)
+      console.log("Given lab Id is wrong.");
+    }else{
+      if(!(password == givenLabPassword))
+      {
+        res.sendStatus(404);
+        console.log("password error");
+      }
+      else{
+        console.log("redirecting");
+        res.send('http://localhost:3000/labHome');
+      }
+    }
+})
+
+
+//Employee login test
   app.post('/login', function(req,res){
     try{
       
-      console.log(req.body.labId);
+      console.log(req.body.email);
       console.log(req.body.password);
 
-      Users.findOne({labId : req.body.labId}, (err,user)=>{
+      Users.findOne({Email : req.body.email}, (err,user)=>{
         
         console.log(req.body);
         
@@ -91,7 +143,7 @@ module.exports = app =>{
           }
           else{
             console.log("redirecting");
-            res.send('http://localhost:3000/labHome');
+            res.send(user.EmployeeId);
           }
         }
       });

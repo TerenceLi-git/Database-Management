@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
    //add requirements
 
 
-   labId: {
+   Email: {
      type:String,
      required: true,
      default :"",
@@ -17,6 +17,12 @@ const mongoose = require('mongoose');
      type : String,
      required: true,
      default :"",
+   },
+
+   EmployeeId: {
+     type:String,
+     required: true,
+     default: "",
    },
  });
  UsersSchema.plugin(timestamp);

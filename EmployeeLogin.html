@@ -5,10 +5,11 @@
 
 <body id="temp">
     <h1>
-        Lab Login
+        Employee Login
     </h1>
+    <div id="EmployeeId"></div>
     <form id="formElem">
-        <input type="text" name="labId" value="0000">
+        <input type="text" name="email" value="testing@gmail.com">
         <input type="text" name="password" value="password">
         <input type="submit">
     </form>
@@ -20,20 +21,19 @@
       var form = document.querySelector("#formElem");
         //data stored for account
         data = {
-            labId : form.querySelector('input[name="labId"]').value,
+            email : form.querySelector('input[name="email"]').value,
           password : form.querySelector('input[name="password"]').value,
         }
 
-        let response = await fetch('labIdlogin', {
+        let response = await fetch('login', {
                 method: 'POST', // or 'PUT'
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
         })
-
         let text = await response.text(); // read response body as text
-        location.href = text;
+        document.getElementById("EmployeeId").innerHTML = text;
     };
 </script>
 </html>
