@@ -2,14 +2,66 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Login Form Tutorial</title>
-		<style></style>
 	</head>
 	<body>
 		<div class="poolMapping">
 			<h1>Pool Mapping</h1>
 		</div>
+		<form id="formElem" onsubmit="onsubmitFunc(event)">
+		Pool Barcodes<input type="text" name="poolBarcode">
+		<br>
+		Test Barcodes
+		<INPUT type="button" value="Add Row" onclick="addRow('dataTable')" />
+		<INPUT type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
+		<table id="dataTable" type="text" name="testBarcode" >
+		</table>
+		<br>
+		<input type="submit">
+		</form>
     </body>
     <script>
+		function addRow(tableID) {
+
+			var table = document.getElementById(tableID);
+
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+
+			var cell1 = row.insertCell(0);
+			var element1 = document.createElement("input");
+			element1.type = "checkbox";
+			element1.name="chkbox[]";
+			cell1.appendChild(element1);
+
+			var cell2 = row.insertCell(1);
+			cell2.innerHTML = rowCount + 1;
+
+			var cell3 = row.insertCell(2);
+			var element2 = document.createElement("input");
+			element2.type = "text";
+			element2.name = "txtbox[]";
+			cell3.appendChild(element2);
+
+
+		}
+		function deleteRow(tableID) {
+			try {
+			var table = document.getElementById(tableID);
+			var rowCount = table.rows.length;
+
+			for(var i=0; i<rowCount; i++) {
+				var row = table.rows[i];
+				var chkbox = row.cells[0].childNodes[0];
+				if(null != chkbox && true == chkbox.checked) {
+					table.deleteRow(i);
+					rowCount--;
+					i--;
+				}
+			}
+			}catch(e) {
+				alert(e);
+			}
+		}
     </script>
 </html>
+
