@@ -5,5 +5,6 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 require('./routes/user')(app);
+require('./routes/testcollectionroute')(app);
 
 module.exports = app;

@@ -102,8 +102,6 @@ module.exports = app => {
         console.log(labId);
         console.log(password);
 
-        console.log(!(password == givenLabPassword));
-
         if (!(labId == givenLabId)) {
             res.sendStatus(404)
             console.log("Given lab Id is wrong.");

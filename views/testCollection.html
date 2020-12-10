@@ -9,32 +9,43 @@
 		<div class="testCollection">
 			<h1>Test Collection</h1>
 		</div>
-		<form id="formElem">
-			<input type="text" name="Employeee ID" value="">
-			<input type="text" name="Test Barcode" value="">
-			<input type="submit">
-    	</form>
+    <form id="formElem" onsubmit="onsubmitFunc(event)">
+      <input type="text" name="labId" value="2222">
+      <input type="text" name="password" value="456">
+      <input type="submit">
+  </form>
     </body>
+    <div id="displayResults"></div>
     <script>
-	formElem.onsubmit = async (e) => {
-      e.preventDefault();
-      var form = document.querySelector("#formElem");
-        //data stored for account
-        data = {
-            labId : form.querySelector('input[name="labId"]').value,
-          password : form.querySelector('input[name="password"]').value,
-        }
 
-        let response = await fetch('labIdlogin', {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-        })
+      async function onsubmitFunc(e) {
+        e.preventDefault();
+        var form = document.querySelector("#formElem");
+          //data stored for account
+          data = {
+            employeeId : form.querySelector('input[name="labId"]').value,
+            testBarcode : form.querySelector('input[name="password"]').value,
+          }
+  
+          let response = await fetch('addTestCollection', {
+                  method: 'POST', // or 'PUT'
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+          })
+  
+          let text = await response.text(); // read response body as text
+          document.getElementById('displayResults').innerHTML = text;
+          return false;
+      };
 
-        let text = await response.text(); // read response body as text
-        location.href = text;
-    };
-    </script>
+    //   function onloadpage() {
+    //     let response = await fetch('getData', {
+    //               method: 'GET', // or 'PUT'
+    //       })
+    //     let text = await response.text();
+    //     document.getElementById('displayResults').innerHTML = text;
+		// }
+  </script>
 </html>
