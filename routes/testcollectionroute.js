@@ -34,7 +34,25 @@ module.exports = app => {
             console.log(TestCollectionList);
             res.send(TestCollectionList);
     })
-}
+
     app.post('/deleteTestCollection', async (req, res)=>{
+        try{
+            const tempTestBarcode = req.body.testBarcode;
         
+            TestCollections.findOne({testBarcode : tempTestBarcode}, async(err, testcollect) =>{
+                if(testcollect){
+                  const ello = await TestCollections.deleteOne({testBarcode : tempTestBarcode});
+                  console.log("Poggers working.");
+                  res.sendStatus(204);
+                }
+                else{
+                  res.status(404).send("Test Collection does not contain this barcode");
+                }
+             
+            })
+          }
+          catch(err){
+            res.send(err);
+          }
     })
+}
