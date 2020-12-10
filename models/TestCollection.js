@@ -17,8 +17,13 @@ const mongoose = require('mongoose');
      required: true,
      default :"",
    },
+
+   testBarcodeStatus: {
+    type:String, 
+    default: "in progress",
+  }
  });
  TestCollectionSchema.plugin(timestamp);
 
- const TestCollection = mongoose.model('TestCollections',TestCollectionSchema);
+ const TestCollection = mongoose.model('TestCollection',TestCollectionSchema);
  module.exports = TestCollection

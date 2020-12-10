@@ -18,6 +18,19 @@ module.exports = app => {
         }
     })
 
+    app.post('/getDataUsingEmpId', async (req, res)=>{
+        const employeeId = req.body.employeeId;
+        console.log(employeeId);
+        try{
+            const TestCollectionList = await TestCollections.find({employeeId : employeeId});
+            res.send(TestCollectionList);
+        }
+        catch(err){
+            console.log(err);
+            res.sendstatus(400);
+        }
+    })
+
     app.post('/addTestCollection', async (req, res)=>{
             const employeeId = req.body.employeeId;
             const testBarcode = req.body.testBarcode;
