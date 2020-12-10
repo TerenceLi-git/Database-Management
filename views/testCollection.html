@@ -5,7 +5,7 @@
 		<title>Login Form Tutorial</title>
 		<style></style>
 	</head>
-	<body>
+	<body onload="server()">
 		<div class="testCollection">
 			<h1>Test Collection</h1>
 		</div>
@@ -38,7 +38,20 @@
           let text = await response.text(); // read response body as text
           document.getElementById('displayResults').innerHTML = text;
           return false;
+      }
+
+
+    function server() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("displayResults").innerHTML =
+            this.responseText;
+        }
       };
+      xhttp.open("GET", "http://localhost:3000/getData");
+      xhttp.send();
+    }
 
     //   function onloadpage() {
     //     let response = await fetch('getData', {
