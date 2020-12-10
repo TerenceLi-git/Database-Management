@@ -3,7 +3,11 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Login Form Tutorial</title>
-		<style></style>
+		<style>
+      table, td {
+        border: 1px solid black;
+      }
+      </style>
 	</head>
 	<body onload="server()">
 		<div class="testCollection">
@@ -14,12 +18,21 @@
       <input type="text" name="password" value="456">
       <input type="submit">
   </form>
+  <table id="displayResults">
+    <tr>
+      <td>Employee ID</td>
+      <td>Test Barcode</td>
+      <td>Delete</td>
+    </tr>
+  </table>
+  <div id="temptest"></div>
     </body>
-    <div id="displayResults"></div>
     <script>
 
       async function onsubmitFunc(e) {
         e.preventDefault();
+        var temp = "";
+        var aObjs = [];
         var form = document.querySelector("#formElem");
           //data stored for account
           data = {
@@ -36,29 +49,62 @@
           })
   
           let text = await response.text(); // read response body as text
-          document.getElementById('displayResults').innerHTML = text;
-          return false;
+            var sTemp = "";
+            for(var i=1; i<text.length; ++i)
+            {
+                sTemp += text[i];
+                if (text[i] == "}")
+                {
+                    i++;
+                    aObjs.push(JSON.parse(sTemp));
+                    sTemp = "";
+                }
+            }
+              var table = document.getElementById("displayResults");
+              var row = table.insertRow(table.length);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              cell1.innerHTML = form.querySelector('input[name="labId"]').value;
+              cell2.innerHTML = form.querySelector('input[name="password"]').value;
+              //  document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs[i].employeeId + "&nbsp Test Barcode: " + aObjs[i].testBarcode + "<br>";
       }
 
 
     function server() {
       var xhttp = new XMLHttpRequest();
+      var temp1 = "";
+      var aObjs1 = [];
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          document.getElementById("displayResults").innerHTML =
-            this.responseText;
+          // document.getElementById("displayResults").innerHTML =
+          //   this.responseText;
+            temp1 = this.responseText;
+            var sTemp1 = "";
+            for(var i=1; i<temp1.length; ++i)
+            {
+                sTemp1 += temp1[i];
+                if (temp1[i] == "}")
+                {
+                    i++;
+                    aObjs1.push(JSON.parse(sTemp1));
+                    sTemp1 = "";
+                }
+            }
+            for(var i = 0; i < aObjs1.length; i++)
+            {
+              var table1 = document.getElementById("displayResults");
+              var row1 = table1.insertRow(table1.length);
+              var cell11 = row1.insertCell(0);
+              var cell21 = row1.insertCell(1);
+              cell11.innerHTML = aObjs1[i].employeeId;
+              cell21.innerHTML = aObjs1[i].testBarcode;
+              // document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs1[i].employeeId + "&nbsp Test Barcode: " + aObjs1[i].testBarcode + "<br>";
+            }
         }
       };
       xhttp.open("GET", "http://localhost:3000/getData");
       xhttp.send();
     }
 
-    //   function onloadpage() {
-    //     let response = await fetch('getData', {
-    //               method: 'GET', // or 'PUT'
-    //       })
-    //     let text = await response.text();
-    //     document.getElementById('displayResults').innerHTML = text;
-		// }
   </script>
 </html>

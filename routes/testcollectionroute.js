@@ -35,3 +35,6 @@ module.exports = app => {
             res.send(TestCollectionList);
     })
 }
+    app.post('/deleteTestCollection', async (req, res)=>{
+        
+    })
