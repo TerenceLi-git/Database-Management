@@ -33,7 +33,7 @@
                 body: JSON.stringify(data),
         })
         let text = await response.text(); // read response body as text
-        document.getElementById("EmployeeId").innerHTML = text;
+        location.href = text;
     };
 </script>
 </html>
