@@ -8,21 +8,24 @@
 			}
 		</style>
 	</head>
-	<body>
+	<body onload="server()">
 		<div class="poolMapping">
 			<h1>Pool Mapping</h1>
-		</div>
+    </div>
+    
 		<form id="formElem" onsubmit="onsubmitFunc(event)">
-		Pool Barcodes<input type="text" name="poolBarcode">
+    Pool Barcodes: <input type="text" name="poolBarcode">
+    
+		<input type="submit">
 		<br>
-		Test Barcodes
 		<INPUT type="button" value="Add Row" onclick="addRow('dataTable')" />
-		<INPUT type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
+    <INPUT type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
+		Test Barcodes:
 		<table id="dataTable" type="text" name="testBarcode" >
 		</table>
 		<br>
-		<input type="submit">
-		</form>
+    </form>
+    
 		<table id="displayResults">
 			<tr>
 			  <td></td>
@@ -118,10 +121,11 @@
         var form = document.querySelector("#formElem");
           //data stored for account
           data = {
-            employeeId : form.querySelector('input[name="poolBarcode"]').value,
+            poolBarcode : form.querySelector('input[name="poolBarcode"]').value,
             testBarcode : form.querySelector('input[name="testBarcode"]').value,
           }
   
+          alert(data);
           let response = await fetch('addPoolMapping', {
                   method: 'POST', // or 'PUT'
                   headers: {

@@ -9,7 +9,7 @@ const PoolMappings = require('../models/PoolMapping')
 module.exports = app => {
     app.get('/getPoolData', async(req, res) => {
         try {
-            const PoolMappingList = await PoolMapping.find({});
+            const PoolMappingList = await PoolMappings.find({});
             res.send(PoolMappingList);
         } catch (err) {
             console.log(err);
