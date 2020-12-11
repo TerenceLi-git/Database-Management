@@ -4,36 +4,33 @@ const bcrypt = require('bcryptjs');
 const e = require('express');
 const { reset } = require('nodemon');
 var path = require('path');
-const TestCollections = require('../models/TestCollection')
+const PoolMappings = require('../models/PoolMapping')
 
 module.exports = app => {
-    app.get('/getData', async(req, res) => {
+    app.get('/getPoolData', async(req, res) => {
         try {
-            const TestCollectionList = await TestCollections.find({});
-            res.send(TestCollectionList);
+            const PoolMappingList = await PoolMapping.find({});
+            res.send(PoolMappingList);
         } catch (err) {
             console.log(err);
             res.sendstatus(400);
         }
     })
 
-    app.post('/addTestCollection', async(req, res) => {
-        const employeeId = req.body.employeeId;
+    app.post('/addPoolMapping', async(req, res) => {
+        const poolBarcode = req.body.poolBarcode;
         const testBarcode = req.body.testBarcode;
-        console.log(employeeId);
+        console.log(poolBarcode);
         console.log(testBarcode);
 
-        const newTestCollection = new TestCollections();
-        newTestCollection.employeeId = req.body.employeeId;
-        newTestCollection.testBarcode = req.body.testBarcode;
+        const newPoolBarcode = new PoolMappings();
+        newPoolBarcode.poolBarcode = req.body.poolBarcode;
+        newPoolBarcode.testBarcode = req.body.testBarcode;
 
-        const TestCollection = await newTestCollection.save();
+        const PoolBarcode = await newPoolBarcode.save();
 
-        const TestCollectionList = await TestCollections.find({});
-        console.log(TestCollectionList);
-        res.send(TestCollectionList);
+        const PoolMappingList = await PoolMappings.find({});
+        console.log(PoolMappingList);
+        res.send(PoolMappingList);
     })
 }
-app.post('/deleteTestCollection', async(req, res) => {
-
-})

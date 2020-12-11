@@ -2,6 +2,11 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<style>
+			table, td {
+			  border: 1px solid black;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="poolMapping">
@@ -18,10 +23,16 @@
 		<br>
 		<input type="submit">
 		</form>
+		<table id="displayResults">
+			<tr>
+			  <td></td>
+			  <td>Pool Barcode</td>
+			  <td>Test Barcode</td>
+			</tr>
+		  </table>
     </body>
     <script>
 		function addRow(tableID) {
-
 			var table = document.getElementById(tableID);
 
 			var rowCount = table.rows.length;
@@ -41,9 +52,8 @@
 			element2.type = "text";
 			element2.name = "txtbox[]";
 			cell3.appendChild(element2);
-
-
 		}
+
 		function deleteRow(tableID) {
 			try {
 			var table = document.getElementById(tableID);
@@ -62,6 +72,89 @@
 				alert(e);
 			}
 		}
+
+	function server() {
+      var xhttp = new XMLHttpRequest();
+      var temp1 = "";
+      var aObjs1 = [];
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            temp1 = this.responseText;
+            var sTemp1 = "";
+            for(var i=1; i<temp1.length; ++i)
+            {
+                sTemp1 += temp1[i];
+                if (temp1[i] == "}")
+                {
+                    i++;
+                    aObjs1.push(JSON.parse(sTemp1));
+                    sTemp1 = "";
+                }
+            }
+            for(var i = 0; i < aObjs1.length; i++)
+            {
+              var table1 = document.getElementById("displayResults");
+              var row1 = table1.insertRow(table1.length);
+              var cell11 = row1.insertCell(0);
+              var element11 = document.createElement("input");
+                element11.type = "checkbox";
+                element11.name="chkbox[]";
+                cell11.appendChild(element11);
+              var cell21 = row1.insertCell(1);
+              var cell31 = row1.insertCell(2);
+              cell21.innerHTML = aObjs1[i].poolBarcode;
+              cell31.innerHTML = aObjs1[i].testBarcode;
+            }
+        }
+      };
+      xhttp.open("GET", "http://localhost:3000/getPoolData");
+      xhttp.send();
+	}
+	
+	async function onsubmitFunc(e) {
+        e.preventDefault();
+        var temp = "";
+        var aObjs = [];
+        var form = document.querySelector("#formElem");
+          //data stored for account
+          data = {
+            employeeId : form.querySelector('input[name="poolBarcode"]').value,
+            testBarcode : form.querySelector('input[name="testBarcode"]').value,
+          }
+  
+          let response = await fetch('addPoolMapping', {
+                  method: 'POST', // or 'PUT'
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+          })
+  
+          let text = await response.text(); // read response body as text
+            var sTemp = "";
+            for(var i=1; i<text.length; ++i)
+            {
+                sTemp += text[i];
+                if (text[i] == "}")
+                {
+                    i++;
+                    aObjs.push(JSON.parse(sTemp));
+                    sTemp = "";
+                }
+            }
+              var table = document.getElementById("displayResults");
+              var row = table.insertRow(table.length);
+              var cell1 = row.insertCell(0);
+              var element1 = document.createElement("input");
+                element1.type = "checkbox";
+                element1.name="chkbox[]";
+                cell1.appendChild(element1);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              cell2.innerHTML = form.querySelector('input[name="poolBarcode"]').value;
+              cell3.innerHTML = form.querySelector('input[name="testBarcode"]').value;
+              //  document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs[i].employeeId + "&nbsp Test Barcode: " + aObjs[i].testBarcode + "<br>";
+      }
     </script>
 </html>
 
