@@ -26,8 +26,9 @@
 			  <td>Pool Barcode</td>
 			  <td>Result</td>
 			</tr>
-		</table>
-		<INPUT type="button" value="Delete Row" onclick="deleteRow()" />
+    </table>
+    <INPUT type="button" value="Edit Row" onclick="" />
+    <INPUT type="button" value="Delete Row" onclick="deleteRow()" />
     </body>
     <script>
 	function server() {
@@ -65,7 +66,6 @@
               cell21.innerHTML = aObjs1[i].wellBarcode;
               cell31.innerHTML = aObjs1[i].poolBarcode;
               cell41.innerHTML = aObjs1[i].poolResult;
-              // document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs1[i].employeeId + "&nbsp Test Barcode: " + aObjs1[i].testBarcode + "<br>";
             }
         }
       };

@@ -54,4 +54,8 @@ module.exports = app => {
           res.send(err);
         }
   })
+
+  app.post('/editWellTesting', async (req, res)=>{
+   
+  })
 }
