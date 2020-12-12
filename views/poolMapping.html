@@ -107,7 +107,7 @@
 				var row = table.rows[i];
 				var chkbox = row.cells[0].childNodes[0];
 				if(null != chkbox && true == chkbox.checked) {
-          poolMappingId = table.rows[i].cells[2].innerHTML;
+          poolMappingId = table.rows[i].cells[1].innerHTML;
 					table.deleteRow(i);
 					rowCount--;
 					i--;
@@ -115,8 +115,10 @@
       }
       
       poolMappingIdString = {
-        poolMapping : poolMappingId,
+        poolBarcode : poolMappingId,
       };
+
+      console.log(poolMappingIdString)
 
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
