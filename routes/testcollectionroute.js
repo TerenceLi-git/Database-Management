@@ -61,7 +61,6 @@ module.exports = app => {
                 else{
                   res.status(404).send("Test Collection does not contain this barcode");
                 }
-             
             })
           }
           catch(err){

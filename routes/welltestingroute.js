@@ -33,4 +33,25 @@ module.exports = app => {
             console.log(WellTestingList);
             res.send(WellTestingList);
     })
+
+    app.post('/deleteWellTesting', async (req, res)=>{
+      try{
+          const tempWellTesting = req.body.wellBarcode;
+      
+          WellTestings.findOne({wellBarcode : tempWellTesting}, async(err, welltest) =>{
+              if(welltest){
+                const ello = await WellTestings.deleteOne({wellBarcode : tempWellTesting});
+                console.log("Poggers working.");
+                res.sendStatus(204);
+              }
+              else{
+                res.status(404).send("Test Collection does not contain this barcode");
+              }
+           
+          })
+        }
+        catch(err){
+          res.send(err);
+        }
+  })
 }
