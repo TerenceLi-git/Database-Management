@@ -27,10 +27,118 @@
 			  <td>Result</td>
 			</tr>
     </table>
-    <INPUT type="button" value="Edit Row" onclick="" />
+    <INPUT type="button" value="Edit Row" onclick="editRow()" />
     <INPUT type="button" value="Delete Row" onclick="deleteRow()" />
+    <div id="tempDisplay"> </div>
     </body>
     <script>
+      function editRow(){
+      var editRowTable = document.getElementById("displayResults");
+      var rowCount2 = editRowTable.rows.length;
+      var wellBarcodeId = "";
+
+			for(var i=0; i<rowCount2; i++) {
+				var row = editRowTable.rows[i];
+				var chkbox = row.cells[0].childNodes[0];
+				if(null != chkbox && true == chkbox.checked) {
+          wellBarcodeId = editRowTable.rows[i].cells[1].innerHTML;
+					rowCount2--;
+          i--;
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "    <INPUT type=\"button\" value=\"In progress\" onclick=\"inProgessChange(" + wellBarcodeId + ")\" /> <INPUT type=\"button\" value=\"Positive\" onclick=\"positiveChange(" + wellBarcodeId + ")\" /> <INPUT type=\"button\" value=\"Negative\" onclick=\"negativeChange(" + wellBarcodeId + ")\" />"
+      
+      }
+      function negativeChange(val)
+      {
+        var xhttp = new XMLHttpRequest();
+        
+      var editRowTable2 = document.getElementById("displayResults");
+      var rowCount2 = editRowTable2.rows.length;
+        dataInProgress = {
+          wellBarcode : val,
+          poolResult : "negative"
+          }
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "";
+
+for(var i=0; i<rowCount2; i++) {
+var row = editRowTable2.rows[i];
+var chkbox = row.cells[0].childNodes[0];
+if(null != chkbox && true == chkbox.checked) {
+  editRowTable2.rows[i].cells[3].innerHTML = "negative";
+  rowCount2--;
+  i--;
+}
+}
+      xhttp.open("POST", "http://localhost:3000/editWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(dataInProgress));
+
+      }
+      function positiveChange(val)
+      {
+        var xhttp = new XMLHttpRequest();
+        
+      var editRowTable2 = document.getElementById("displayResults");
+      var rowCount2 = editRowTable2.rows.length;
+        dataInProgress = {
+          wellBarcode : val,
+          poolResult : "positive"
+          }
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "";
+
+for(var i=0; i<rowCount2; i++) {
+var row = editRowTable2.rows[i];
+var chkbox = row.cells[0].childNodes[0];
+if(null != chkbox && true == chkbox.checked) {
+  editRowTable2.rows[i].cells[3].innerHTML = "positive";
+  rowCount2--;
+  i--;
+}
+}
+      xhttp.open("POST", "http://localhost:3000/editWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(dataInProgress));
+
+      }
+      function inProgessChange(val)
+      {
+        var xhttp = new XMLHttpRequest();
+        
+      var editRowTable2 = document.getElementById("displayResults");
+      var rowCount2 = editRowTable2.rows.length;
+        dataInProgress = {
+          wellBarcode : val,
+          poolResult : "in progress"
+          }
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "";
+
+for(var i=0; i<rowCount2; i++) {
+var row = editRowTable2.rows[i];
+var chkbox = row.cells[0].childNodes[0];
+if(null != chkbox && true == chkbox.checked) {
+  editRowTable2.rows[i].cells[3].innerHTML = "in progress";
+  rowCount2--;
+  i--;
+}
+}
+      xhttp.open("POST", "http://localhost:3000/editWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(dataInProgress));
+
+      }
 	function server() {
       var xhttp = new XMLHttpRequest();
       var temp1 = "";

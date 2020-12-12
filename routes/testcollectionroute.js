@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const e = require('express');
 const { reset } = require('nodemon');
 var path = require('path');
-const TestCollections = require('../models/TestCollection')
+const TestCollections = require('../models/TestCollection');
 
 module.exports = app => {
     app.get('/getData', async (req, res)=>{

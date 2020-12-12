@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const e = require('express');
 const { reset } = require('nodemon');
 var path = require('path');
-const PoolMappings = require('../models/PoolMapping')
+const PoolMappings = require('../models/PoolMapping');
 
 module.exports = app => {
     app.get('/getPoolData', async(req, res) => {
