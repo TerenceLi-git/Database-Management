@@ -14,8 +14,11 @@
 			<h1>Test Collection</h1>
 		</div>
     <form id="formElem" onsubmit="onsubmitFunc(event)">
-      <input type="text" name="labId" value="2222">
-      <input type="text" name="password" value="456">
+
+      Employee Id: <input type="text" name="labId" value="2222">
+      <br>
+      Test Barcode: <input type="text" name="password" value="456">
+      <br>
       <input type="submit">
   </form>
   <table id="displayResults">
@@ -29,19 +32,6 @@
   <div id="temptest"></div>
     </body>
     <script>
-
-      // function deleteRowFunc(clicked_id){
-      //     var xhttp = new XMLHttpRequest();
-      //     var testBarcodeId = clicked_id
-      //     var table = document.getElementById("displayResults");
-      //     xhttp.onreadystatechange = function() {
-      //     if (this.readyState == 4 && this.status == 200) {
-            
-      //     }
-      //   }
-      // }
-
-
       function deleteRow() {
 			var table = document.getElementById("displayResults");
       var rowCount = table.rows.length;
@@ -65,7 +55,7 @@
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          alert("Deleted Successfully")
+          console.log("Deleted Successfully")
         }
       }
       xhttp.open("POST", "http://localhost:3000/deleteTestCollection", true);

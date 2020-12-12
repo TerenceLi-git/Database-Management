@@ -35,23 +35,23 @@ module.exports = app => {
     })
 
     app.post('/deletePoolMapping', async (req, res)=>{
-        try{
-            const temppoolBarcode = req.body.poolBarcode;
-        
-            PoolMappings.findOne({poolBarcode : temppoolBarcode}, async(err, poolcollect) =>{
-                if(poolcollect){
-                  const ello = await PoolMappings.deleteOne({poolBarcode : temppoolBarcode});
-                  console.log("Poggers working.");
-                  res.sendStatus(204);
-                }
-                else{
-                  res.status(404).send("Pool Mapping does not contain this barcode");
-                }
-             
-            })
-          }
-          catch(err){
-            res.send(err);
-          }
-    })
+      try{
+          const temppoolBarcode = req.body.poolBarcode;
+      
+          PoolMappings.findOne({poolBarcode : temppoolBarcode}, async(err, poolcollect) =>{
+              if(poolcollect){
+                const ello = await PoolMappings.deleteOne({poolBarcode : temppoolBarcode});
+                console.log("Poggers working.");
+                res.sendStatus(204);
+              }
+              else{
+                res.status(404).send("Pool Mapping does not contain this barcode");
+              }
+           
+          })
+        }
+        catch(err){
+          res.send(err);
+        }
+  })
 }
