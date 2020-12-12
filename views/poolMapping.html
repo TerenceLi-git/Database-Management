@@ -15,15 +15,14 @@
     
 		<form id="formElem" onsubmit="onsubmitFunc(event)">
     Pool Barcodes: <input type="text" name="poolBarcode">
-    
-		<input type="submit">
-		<br>
+    <br>
+    Test Barcodes:
 		<INPUT type="button" value="Add Row" onclick="addRow('dataTable')" />
-    <INPUT type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
-		Test Barcodes:
+    <INPUT type="button" value="Delete Row" onclick="deleteRow1('dataTable')" />
 		<table id="dataTable" type="text" name="testBarcode" >
 		</table>
-		<br>
+    <br>
+    <input type="submit">
     </form>
     
 		<table id="displayResults">
@@ -32,9 +31,36 @@
 			  <td>Pool Barcode</td>
 			  <td>Test Barcode</td>
 			</tr>
-		  </table>
+      </table>
+      <INPUT type="button" value="Delete Row" onclick="deleteRow2()" />
     </body>
     <script>
+    // function table_to_array(table_id) {
+    //   myData = document.getElementById(table_id).rows
+    //   my_liste = []
+    //   for (var i = 0; i < myData.length; i++) {
+    //           el = myData[i].children
+    //           my_el = el[2].children.value
+    //           // for (var j = 0; j < el.length; j++) {
+    //           //         my_el.push(el[j].innerText);
+    //           // }
+    //           console.log(my_el)
+    //           my_liste.push(my_el)
+
+    //   }
+    //   return my_liste
+    // }
+   
+    function table_to_array() {
+      my_list = []
+      var x = document.getElementsByName("txtbox[]");
+      var i;
+      for (i = 0; i < x.length; i++) {
+        my_list.push(x[i].value)
+      }
+      console.log(my_list)
+      return my_list
+    }
 		function addRow(tableID) {
 			var table = document.getElementById(tableID);
 
@@ -55,12 +81,11 @@
 			element2.type = "text";
 			element2.name = "txtbox[]";
 			cell3.appendChild(element2);
-		}
-
-		function deleteRow(tableID) {
-			try {
+    }
+    
+    function deleteRow1(tableID) {
 			var table = document.getElementById(tableID);
-			var rowCount = table.rows.length;
+      var rowCount = table.rows.length;
 
 			for(var i=0; i<rowCount; i++) {
 				var row = table.rows[i];
@@ -70,10 +95,38 @@
 					rowCount--;
 					i--;
 				}
-			}
-			}catch(e) {
-				alert(e);
-			}
+      }
+    }
+
+		function deleteRow2() {
+			var table = document.getElementById("displayResults");
+      var rowCount = table.rows.length;
+      var poolMappingId = "";
+
+			for(var i=0; i<rowCount; i++) {
+				var row = table.rows[i];
+				var chkbox = row.cells[0].childNodes[0];
+				if(null != chkbox && true == chkbox.checked) {
+          poolMappingId = table.rows[i].cells[2].innerHTML;
+					table.deleteRow(i);
+					rowCount--;
+					i--;
+				}
+      }
+      
+      poolMappingIdString = {
+        poolMapping : poolMappingId,
+      };
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          alert("Deleted Successfully")
+        }
+      }
+      xhttp.open("POST", "http://localhost:3000/deletePoolMapping", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(poolMappingIdString));
 		}
 
 	function server() {
@@ -120,12 +173,13 @@
         var aObjs = [];
         var form = document.querySelector("#formElem");
           //data stored for account
+          var tableToArr = [];
+          tableToArr = table_to_array();
           data = {
             poolBarcode : form.querySelector('input[name="poolBarcode"]').value,
-            testBarcode : form.querySelector('input[name="testBarcode"]').value,
+            testBarcode : tableToArr
           }
   
-          alert(data);
           let response = await fetch('addPoolMapping', {
                   method: 'POST', // or 'PUT'
                   headers: {
@@ -156,8 +210,7 @@
               var cell2 = row.insertCell(1);
               var cell3 = row.insertCell(2);
               cell2.innerHTML = form.querySelector('input[name="poolBarcode"]').value;
-              cell3.innerHTML = form.querySelector('input[name="testBarcode"]').value;
-              //  document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs[i].employeeId + "&nbsp Test Barcode: " + aObjs[i].testBarcode + "<br>";
+              cell3.innerHTML = tableToArr;
       }
     </script>
 </html>
