@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			table, td {
+			  border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body onload="server()">
+		<div class="wellTesting">
+			<h1>Well Testing</h1>
+		</div>
+		<form id="formElem" onsubmit="onsubmitFunc(event)">
+			Well Barcode: <input type="text" name="wellbarcode">
+			<br>
+			Pool Barcode: <input type="text" name="poolbarcode">
+			<br>
+			<input type="submit">
+		</form>
+		<table id="displayResults">
+			<tr>
+			  <td></td>
+			  <td>Well Barcode</td>
+			  <td>Pool Barcode</td>
+			  <td>Result</td>
+			</tr>
+    </table>
+    <INPUT type="button" value="Edit Row" onclick="editRow()" />
+    <INPUT type="button" value="Delete Row" onclick="deleteRow()" />
+    <div id="tempDisplay"> </div>
+    </body>
+    <script>
+      function editRow(){
+      var editRowTable = document.getElementById("displayResults");
+      var rowCount2 = editRowTable.rows.length;
+      var wellBarcodeId = "";
+
+			for(var i=0; i<rowCount2; i++) {
+				var row = editRowTable.rows[i];
+				var chkbox = row.cells[0].childNodes[0];
+				if(null != chkbox && true == chkbox.checked) {
+          wellBarcodeId = editRowTable.rows[i].cells[1].innerHTML;
+					rowCount2--;
+          i--;
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "    <INPUT type=\"button\" value=\"In progress\" onclick=\"inProgessChange(" + wellBarcodeId + ")\" /> <INPUT type=\"button\" value=\"Positive\" onclick=\"positiveChange(" + wellBarcodeId + ")\" /> <INPUT type=\"button\" value=\"Negative\" onclick=\"negativeChange(" + wellBarcodeId + ")\" />"
+      
+      }
+      function negativeChange(val)
+      {
+        var xhttp = new XMLHttpRequest();
+        
+      var editRowTable2 = document.getElementById("displayResults");
+      var rowCount2 = editRowTable2.rows.length;
+        dataInProgress = {
+          wellBarcode : val,
+          poolResult : "negative"
+          }
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "";
+
+for(var i=0; i<rowCount2; i++) {
+var row = editRowTable2.rows[i];
+var chkbox = row.cells[0].childNodes[0];
+if(null != chkbox && true == chkbox.checked) {
+  editRowTable2.rows[i].cells[3].innerHTML = "negative";
+  rowCount2--;
+  i--;
+}
+}
+      xhttp.open("POST", "http://localhost:3000/editWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(dataInProgress));
+
+      }
+      function positiveChange(val)
+      {
+        var xhttp = new XMLHttpRequest();
+        
+      var editRowTable2 = document.getElementById("displayResults");
+      var rowCount2 = editRowTable2.rows.length;
+        dataInProgress = {
+          wellBarcode : val,
+          poolResult : "positive"
+          }
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "";
+
+for(var i=0; i<rowCount2; i++) {
+var row = editRowTable2.rows[i];
+var chkbox = row.cells[0].childNodes[0];
+if(null != chkbox && true == chkbox.checked) {
+  editRowTable2.rows[i].cells[3].innerHTML = "positive";
+  rowCount2--;
+  i--;
+}
+}
+      xhttp.open("POST", "http://localhost:3000/editWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(dataInProgress));
+
+      }
+      function inProgessChange(val)
+      {
+        var xhttp = new XMLHttpRequest();
+        
+      var editRowTable2 = document.getElementById("displayResults");
+      var rowCount2 = editRowTable2.rows.length;
+        dataInProgress = {
+          wellBarcode : val,
+          poolResult : "in progress"
+          }
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+      }
+      document.getElementById("tempDisplay").innerHTML = "";
+
+for(var i=0; i<rowCount2; i++) {
+var row = editRowTable2.rows[i];
+var chkbox = row.cells[0].childNodes[0];
+if(null != chkbox && true == chkbox.checked) {
+  editRowTable2.rows[i].cells[3].innerHTML = "in progress";
+  rowCount2--;
+  i--;
+}
+}
+      xhttp.open("POST", "http://localhost:3000/editWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(dataInProgress));
+
+      }
+	function server() {
+      var xhttp = new XMLHttpRequest();
+      var temp1 = "";
+      var aObjs1 = [];
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // document.getElementById("displayResults").innerHTML =
+          //   this.responseText;
+            temp1 = this.responseText;
+            var sTemp1 = "";
+            for(var i=1; i<temp1.length; ++i)
+            {
+                sTemp1 += temp1[i];
+                if (temp1[i] == "}")
+                {
+                    i++;
+                    aObjs1.push(JSON.parse(sTemp1));
+                    sTemp1 = "";
+                }
+            }
+            for(var i = 0; i < aObjs1.length; i++)
+            {
+              var table1 = document.getElementById("displayResults");
+              var row1 = table1.insertRow(table1.length);
+              var cell11 = row1.insertCell(0);
+              var element11 = document.createElement("input");
+                element11.type = "checkbox";
+                element11.name="chkbox[]";
+                cell11.appendChild(element11);
+              var cell21 = row1.insertCell(1);
+              var cell31 = row1.insertCell(2);
+              var cell41 = row1.insertCell(3);
+              cell21.innerHTML = aObjs1[i].wellBarcode;
+              cell31.innerHTML = aObjs1[i].poolBarcode;
+              cell41.innerHTML = aObjs1[i].poolResult;
+            }
+        }
+      };
+      xhttp.open("GET", "http://localhost:3000/getWellData");
+      xhttp.send();
+    }
+    async function onsubmitFunc(e) {
+        e.preventDefault();
+        var temp = "";
+        var aObjs = [];
+        var form = document.querySelector("#formElem");
+          //data stored for account
+          data = {
+            wellBarcode : form.querySelector('input[name="wellbarcode"]').value,
+            poolBarcode : form.querySelector('input[name="poolbarcode"]').value,
+          }
+  
+          let response = await fetch('addWellTesting', {
+                  method: 'POST', // or 'PUT'
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+          })
+  
+          let text = await response.text(); // read response body as text
+            var sTemp = "";
+            for(var i=1; i<text.length; ++i)
+            {
+                sTemp += text[i];
+                if (text[i] == "}")
+                {
+                    i++;
+                    aObjs.push(JSON.parse(sTemp));
+                    sTemp = "";
+                }
+            }
+              var table = document.getElementById("displayResults");
+              var row = table.insertRow(table.length);
+              var cell1 = row.insertCell(0);
+              var element1 = document.createElement("input");
+                element1.type = "checkbox";
+                element1.name="chkbox[]";
+                cell1.appendChild(element1);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              cell2.innerHTML = form.querySelector('input[name="wellbarcode"]').value;
+              cell3.innerHTML = form.querySelector('input[name="poolbarcode"]').value;
+              cell4.innerHTML = "in progress"
+              //  document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs[i].employeeId + "&nbsp Test Barcode: " + aObjs[i].testBarcode + "<br>";
+      }
+      function deleteRow() {
+			var table = document.getElementById("displayResults");
+      var rowCount = table.rows.length;
+      var wellBarcodeId = "";
+
+			for(var i=0; i<rowCount; i++) {
+				var row = table.rows[i];
+				var chkbox = row.cells[0].childNodes[0];
+				if(null != chkbox && true == chkbox.checked) {
+          wellBarcodeId = table.rows[i].cells[1].innerHTML;
+					table.deleteRow(i);
+					rowCount--;
+          i--;
+        }
+      }
+
+      wellBarcodeIdString = {
+        wellBarcode : wellBarcodeId,
+      };
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log("Deleted Successfully")
+        }
+      }
+      xhttp.open("POST", "http://localhost:3000/deleteWellTesting", true);
+      xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      xhttp.send(JSON.stringify(wellBarcodeIdString));
+		}
+    </script>
+</html>

@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>test</title>
+</head>
+
+<body id="temp">
+    <h1>
+        Employee Login
+    </h1>
+    <div id="EmployeeId"></div>
+    <form id="formElem">
+        <input type="text" name="email" value="jasonwang123@gmail.com">
+        <input type="text" name="password" value="dannyzhang">
+        <input type="submit">
+    </form>
+</body>
+<script>
+
+    formElem.onsubmit = async (e) => {
+      e.preventDefault();
+      var form = document.querySelector("#formElem");
+        //data stored for account
+        data = {
+            email : form.querySelector('input[name="email"]').value,
+          password : form.querySelector('input[name="password"]').value,
+        }
+
+        let response = await fetch('login', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+        })
+        let text = await response.text(); // read response body as text
+        location.href = text;
+    };
+</script>
+</html>

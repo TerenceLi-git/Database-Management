@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Employee Home</title>
+		<style>      table, td {
+			border: 1px solid black;
+		  }</style>
+	</head>
+	<body>
+		<div class="login-form">
+			<h1>Employee Home</h1>
+		</div>
+		<div id='here'></div>
+	</body>
+	<table id="displayResults">
+		<tr>
+		  <td>Test Barcode</td>
+		  <td>Result</td>
+		</tr>
+	  </table>
+    <script>
+		window.onload = function () {
+			var url = document.location.href;
+			var id = url.split("=");
+			var id = id[1];
+			
+			var xhttp = new XMLHttpRequest();
+			var temp1 = "";
+			var aObjs1 = [];
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				// document.getElementById("displayResults").innerHTML =
+				//   this.responseText;
+					temp1 = this.responseText;
+					var sTemp1 = "";
+					for(var i=1; i<temp1.length; ++i)
+					{
+						sTemp1 += temp1[i];
+						if (temp1[i] == "}")
+						{
+							i++;
+							aObjs1.push(JSON.parse(sTemp1));
+							sTemp1 = "";
+						}
+					}
+					for(var i = 0; i < aObjs1.length; i++)
+					{
+						var table1 = document.getElementById("displayResults");
+						var row1 = table1.insertRow(table1.length);
+						var cell21 = row1.insertCell(0);
+						var cell31 = row1.insertCell(1);
+						cell21.innerHTML = aObjs1[i].testBarcode;
+						cell31.innerHTML = aObjs1[i].testBarcodeStatus;
+						// document.getElementById("temptest").innerHTML = document.getElementById("temptest").innerHTML + "Employee Id: " + aObjs1[i].employeeId + "&nbsp Test Barcode: " + aObjs1[i].testBarcode + "<br>";
+					}
+				}
+			}
+			testBarcodeIdString = {
+				employeeId : id,
+			}
+			xhttp.open("POST", "http://localhost:3000/getDataUsingEmpId", true);
+      		xhttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      		xhttp.send(JSON.stringify(testBarcodeIdString));
+		}
+    </script>
+</html>

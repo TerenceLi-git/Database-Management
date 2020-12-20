@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>test</title>
+</head>
+
+<body id="temp">
+    <h1>
+        Lab Login
+    </h1>
+    <form id="formElem">
+        <input type="text" name="labId" value="0000">
+        <input type="text" name="password" value="password">
+        <input type="submit">
+    </form>
+</body>
+<script>
+
+    formElem.onsubmit = async (e) => {
+      e.preventDefault();
+      var form = document.querySelector("#formElem");
+        //data stored for account
+        data = {
+            labId : form.querySelector('input[name="labId"]').value,
+          password : form.querySelector('input[name="password"]').value,
+        }
+
+        let response = await fetch('labIdlogin', {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+        })
+
+        let text = await response.text(); // read response body as text
+        location.href = text;
+    };
+</script>
+</html>
